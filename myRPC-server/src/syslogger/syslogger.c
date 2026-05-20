@@ -18,7 +18,7 @@ const char *log_level_strings[] = {
   file - name of the logfile
   text - text with formatting support
 */
-int logdoc(int level, const char* file, const char* text, ...)
+int syslogger(int level, const char* file, const char* text, ...)
 {
     FILE *fp = fopen(file, "a");
     if (fp == NULL) {
