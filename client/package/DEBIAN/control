@@ -1,0 +1,12 @@
+Package: myrpc-client
+Version: 1.0
+Section: net
+Priority: optional
+Depends: libc6
+Architecture: amd64
+Essential: no
+Installed-Size: 16
+Maintainer: Student <student@example.com>
+Description: Клиент myRPC для удалённого вызова команд
+ Консольная утилита для выполнения команд на сервере myRPC
+ через сокеты TCP/UDP по JSON-протоколу.
