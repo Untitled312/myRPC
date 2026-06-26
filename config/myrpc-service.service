@@ -1,0 +1,26 @@
+[Unit]
+Description=myRPC server daemon
+After=network.target
+RequiresMountsFor=/run/myrpc-server /var/log /etc/myrpc
+
+[Service]
+Type=forking
+User=myrpc
+Group=myrpc
+PIDFile=/run/myrpc-server/myrpc-server.pid
+RuntimeDirectory=myrpc-server
+RuntimeDirectoryMode=0755
+LogsDirectory=myrpc
+ExecStart=/usr/bin/myrpc-server
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-failure
+RestartSec=5
+
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/run/myrpc-server /var/log /tmp
+PrivateTmp=yes
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=multi-user.target
