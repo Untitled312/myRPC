@@ -1,0 +1,59 @@
+#!/bin/bash
+set -e
+
+case "$1" in
+    configure)
+        echo "[myrpc-server] Настройка пакета..."
+
+        test -d /etc/myrpc || mkdir -p /etc/myrpc
+
+        test -d /run/myrpc-server || mkdir -p /run/myrpc-server
+
+        touch /var/log/myrpc.log
+
+        chmod -R 755 /etc/myrpc
+
+        chmod 775 /var/log/myrpc.log
+
+        getent group myrpc >/dev/null || addgroup --system myrpc
+
+        id myrpc >/dev/null || adduser --system \
+            --ingroup myrpc \
+            --no-create-home \
+            --disabled-login \
+            --shell /usr/sbin/nologin \
+            myrpc
+
+        chown root:myrpc /var/log/myrpc.log
+        chown -R myrpc:myrpc /run/myrpc-server
+        chmod 755 /run/myrpc-server
+
+        if [ ! -f /etc/myrpc/myrpc.conf ]; then
+            echo "[myrpc-server] Внимание: /etc/myrpc/myrpc.conf отсутствует!"
+        fi
+        if [ ! -f /etc/myrpc/users.conf ]; then
+            echo "[myrpc-server] Внимание: /etc/myrpc/users.conf отсутствует!"
+        fi
+
+        systemctl daemon-reload 2>/dev/null || true
+
+        systemctl enable myrpc-server.service 2>/dev/null || true
+
+        echo "[myrpc-server] Пакет успешно установлен."
+        echo "[myrpc-server] Запуск:   systemctl start myrpc-server"
+        echo "[myrpc-server] Конфиг:   /etc/myrpc/myrpc.conf"
+        echo "[myrpc-server] Пользователи: /etc/myrpc/users.conf"
+        echo "[myrpc-server] Лог:      /var/log/myrpc.log"
+        ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+        exit 0
+        ;;
+
+    *)
+        echo "postinst called with unknown argument: $1" >&2
+        exit 1
+        ;;
+esac
+
+exit 0
