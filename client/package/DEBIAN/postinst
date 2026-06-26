@@ -1,0 +1,3 @@
+#!/bin/bash
+echo "[myrpc-client] Пакет успешно установлен."
+echo "[myrpc-client] Использование: myrpc-client -h <host> -p <port> -s -c \"<cmd>\""
