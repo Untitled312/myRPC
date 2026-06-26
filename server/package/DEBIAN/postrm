@@ -1,0 +1,42 @@
+#!/bin/bash
+set -e
+
+case "$1" in
+    remove)
+        echo "[myrpc-server] Останавливаю службу..."
+        systemctl stop myrpc-server.service 2>/dev/null || true
+        systemctl disable myrpc-server.service 2>/dev/null || true
+        systemctl daemon-reload 2>/dev/null || true
+
+        rm -rf /run/myrpc-server
+        ;;
+
+    purge)
+        echo "[myrpc-server] Полная очистка..."
+
+        rm -rf /etc/myrpc
+
+        rm -f /var/log/myrpc.log
+
+        rm -rf /run/myrpc-server
+
+        if id myrpc >/dev/null 2>&1; then
+            userdel myrpc 2>/dev/null || true
+            echo "[myrpc-server] Пользователь myrpc удалён."
+        fi
+        if getent group myrpc >/dev/null 2>&1; then
+            groupdel myrpc 2>/dev/null || true
+            echo "[myrpc-server] Группа myrpc удалена."
+        fi
+        ;;
+
+    upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
+        ;;
+
+    *)
+        echo "postrm called with unknown argument: $1" >&2
+        exit 1
+        ;;
+esac
+
+exit 0
