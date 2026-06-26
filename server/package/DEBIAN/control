@@ -1,0 +1,12 @@
+Package: myrpc-server
+Version: 1.0
+Section: net
+Priority: optional
+Depends: libc6, systemd
+Architecture: amd64
+Essential: no
+Installed-Size: 32
+Maintainer: Student <student@example.com>
+Description: Сервер-демон myRPC
+ Демон, выполняющий команды по сокетам TCP/UDP
+ от разрешённых пользователей. Устанавливает systemd-службу.
