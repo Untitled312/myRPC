@@ -146,9 +146,15 @@ myrpc_parse_request (const char *json, struct myrpc_request *req)
       if (!p) return -1;
 
       if (strcmp (key, "login") == 0)
-        strncpy (req->login, val, MYRPC_MAX_USER_LEN - 1);
+        {
+          strncpy (req->login, val, MYRPC_MAX_USER_LEN - 1);
+          req->login[MYRPC_MAX_USER_LEN - 1] = '\0';
+        }
       else if (strcmp (key, "command") == 0)
-        strncpy (req->command, val, MYRPC_MAX_CMD_LEN - 1);
+        {
+          strncpy (req->command, val, MYRPC_MAX_CMD_LEN - 1);
+          req->command[MYRPC_MAX_CMD_LEN - 1] = '\0';
+        }
     }
 
   if (req->login[0] == '\0' || req->command[0] == '\0')
